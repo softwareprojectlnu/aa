@@ -1,0 +1,25 @@
+<!--
+<div class="form">
+  <mat-card>
+    <mat-form-field class ="mat-full-width">
+      <input matInput="email" type="text" placeholder="Enter your email" [formControl]="form.controls['email']">
+    </mat-form-field>
+
+    <mat-form-field class="mat-full-width">
+      <input matInput type="password" placeholder="Enter your password" [formControl]="form.controls['password']">
+    </mat-form-field>
+
+    <button class="mat-raised-button mat-primary" (click)="addUser()">Sign up</button>
+  </mat-card>
+</div>
+-->
+<ul *ngFor="let user of users | async">
+  <li>
+    <strong>{{ user.email}}</strong>
+    <br>
+    {{user.name}}
+  </li>
+</ul>
+<input type="text" [(ngModel)]="email" name="email" placeholder="Enter the email">
+<input type="password" [(ngModel)]="password" name="password" placeholder="Enter password">
+<input type="submit" value="Log in" (click)="addUser()">

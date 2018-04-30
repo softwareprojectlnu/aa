@@ -1,0 +1,10 @@
+mat-card{
+    max-width: 100%;
+ 
+}
+
+
+.btn{
+    float:right;
+   cursor: pointer;
+}

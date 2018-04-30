@@ -1,0 +1,21 @@
+<mat-card>
+
+  <mat-card-content>
+    <button mat-raised-button color="primary" [routerLink]="['/cart']" class="btn" [matMenuTriggerFor] ="menu" > Manage Products</button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [routerLink]="['/view']">
+        <mat-icon> view_list</mat-icon>
+        <span>View products</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/add']"  >
+        <mat-icon > add </mat-icon>
+        <span>Add products</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/delete']">
+        <mat-icon>delete</mat-icon>
+        <span> Delete products</span>
+      </button>
+    </mat-menu>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,40 @@
+<!--
+<div *ngIf="users?.length > 0; else noUsers">
+  <ul *ngFor="let user of users" class="collection">
+    <li class="collection-user"><strong>{{user.email}}: </strong> {{user.name}}
+    </li>
+  </ul>
+</div>
+
+<ng-template #noUsers>
+  <hr>
+  <h5>There are no users to display</h5>
+</ng-template>
+
+<ul *ngFor="let user of users | async">
+  <li>
+    <strong>{{ user.email}}</strong>
+    <br>
+    {{user.name}}
+  </li>
+</ul>
+
+<ul *ngFor="let user of users | async">
+  <li (click)="getProduct(user.id)">
+    <strong>{{ user.data.email}}</strong>
+    <br>
+    {{user.data.name}}
+  </li>
+</ul>
+
+<h1>A specific post:</h1>
+
+<h3>{{ (users | async)?.title }}</h3>
+<p>{{ (users | async)?.type }}</p>
+
+<input type="text" [(ngModel)]="title" name="tittle" placeholder="Enter the title">
+<input type="text" [(ngModel)]="type" name="type" placeholder="Enter type">
+<input type="number" [(ngModel)]="price" name="price" placeholder="Enter the price">
+<textarea [(ngModel)]="description" name="description" placeholder="Enter the description"></textarea>
+<input type="submit" value="Add a product" (click)="addProduct()">
+-->
