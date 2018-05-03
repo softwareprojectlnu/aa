@@ -1,75 +1,65 @@
 import { Injectable } from '@angular/core';
-import {FirebaseService} from './firebase.service';
-import {AngularFireDatabase} from 'angularfire2/database';
-import * as _ from 'lodash';
-import {FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2/database-deprecated';
-// import {AuthService} from './auth.service';
-/*
-interface Products {
-  title;
-  type;
-  description;
-  price;
-}
-*/
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
+import {Product} from '../product';
+import {Observable} from 'rxjs/Observable';
+import {AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask} from 'angularfire2/storage';
+import { map } from 'rxjs/operators/map';
+
 @Injectable()
 export class PostService {
+  prodCollection: AngularFirestoreCollection<Product>;
+  prodDoc: AngularFirestoreDocument<Product>;
+  products: Observable<Product[]>;
 
-  userRoles: Array<string>;
-  item: FirebaseListObservable<any[]>;
-  details: FirebaseObjectObservable<any[]>;
-/*
-  constructor( private auth: AuthService, private db: AngularFireDatabase) {
-    auth.user.map(user => {
-      return this.userRoles = _.keys(_.get(user, 'roles'));
-    })
-      .subscribe();
-  }
-  */
-constructor() {}
+  ref: AngularFireStorageReference;
+  task: AngularFireUploadTask;
+  uploadProgress: Observable<number>;
+  downloadURL: Observable<string>;
+  uploadState: Observable<string>;
 
-  viewProducts() {
-    // this.item =  this.db.list('/item') as FirebaseListObservable<Products[]>;
-  }
+  editState: boolean = false;
+  itemToEdit: Product;
 
-  viewDetails(id) {
- //   return this.details = this.db.object('posts/' + id) as FirebaseObjectObservable<Products[]>;
-  }
+  constructor(private afs: AngularFirestore, private afStorage: AngularFireStorage) {
+    afs.firestore.settings({ timestampsInSnapshots: true });
 
-  addProduct(details) {
-    if(this.canEdit) {
-      const product = JSON.parse(JSON.stringify(this.details));
-      console.log('Product - ', product);
-      return this.item.push(product);
-    }// else {
-     // console.log('action prevented!');
-   // }
-  }
-
-  deleteProduct(id) {
-    return this.item.remove(id);
-  }
-
-  ////////// Authorization Login /////////
-
-  get canRead(): boolean {
-    const allowed = ['admin', 'author', 'reader']
-    return this.matchingRole(allowed);
-  }
-
-  get canEdit(): boolean {
-    const allowed = ['admin', 'author']
-    return this.matchingRole(allowed);
-  }
-
-  get canDelete(): boolean {
-    const allowed = ['admin']
-    return this.matchingRole(allowed);
+    this.prodCollection = this.afs.collection('products');
+    this.products = this.prodCollection.snapshotChanges().map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Product;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    });
   }
 
 
-  /// Helper to determine if any matching roles exist
-  private matchingRole(allowedRoles): boolean {
-    return !_.isEmpty(_.intersection(allowedRoles, this.userRoles));
+  getProducts() {
+    return this.products;
   }
+
+  deleteProduct(prod: Product) {
+  this.afs.collection('products').doc(prod.id).delete();
+
+  }
+
+  updateProduct(prod: Product) {
+
+    this.afs.collection('products').doc(prod.id).update({
+      title: prod.title,
+      type: prod.type,
+      price: prod.price,
+      description: prod.description
+    });
+  }
+
+  uploadPicture(event) {
+    const id = Math.random().toString(36).substring(2);
+    this.ref = this.afStorage.ref(id);
+    this.task = this.ref.put(event.target.files[0]);
+    this.uploadState = this.task.snapshotChanges().pipe(map(s => s.state));
+    this.uploadProgress = this.task.percentageChanges();
+    this.downloadURL = this.task.downloadURL();
+  }
+
 }

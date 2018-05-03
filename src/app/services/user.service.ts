@@ -8,8 +8,6 @@ import {Users} from '../Users';
 @Injectable()
 export class UserService {
 
-
-
  userCollections: AngularFirestoreCollection<Users>;
   users: Observable<Users[]>;
 

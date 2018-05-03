@@ -1,9 +1,9 @@
 export interface Product {
+  id: any;
   title: string;
   type: string;
   description: string;
   price: number;
-}
-export interface ProductId extends Product{
-  id: String;
+  file?: File;
+  photo?: any;
 }

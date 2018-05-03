@@ -1,1 +1,39 @@
-<button mat-raised-button color="primary"  class="btn" > Delete </button>
+
+<div *ngIf="products?.length > 0;else noItems">
+  <ul>
+    <li *ngFor="let prod of products; let i = index">
+      {{ i + 1 }} - <br> Title - {{ prod.title }} <br> Type - {{ prod.type }} <br> Price - {{ prod.price }} <br> Description - {{ prod.description }}
+        <i (click)="editable($event, prod)" class="fa fa-pencil"></i>
+<!--     <i *ngIf="editState && itemToEdit.id == prod.id" (click)="clear()" class="fa fa-compress"></i>
+
+      <div *ngIf="editState && itemToEdit.id == prod.id"> -->
+        <form (ngSubmit)="update(prod)">
+          <div class="row">
+            <div class="input-field col s6">
+            <input type="text" placeholder="Add Title" [(ngModel)]="prod.title" name="title">
+            </div>
+            <div class="input-field col s6">
+              <input type="text" placeholder="Add Description" [(ngModel)]="prod.description" name="description">
+            </div>
+            <div class="input-field col s6">
+                  <input type="text" placeholder="Add Type" [(ngModel)]="prod.type" name="type">
+            </div>
+            <div class="input-field col s6">
+                  <input type="number" placeholder="Add Price" [(ngModel)]="prod.price" name="price">
+            </div>
+            <input type="submit" value="Update Item" class="btn orange">
+            <button (click)="delete(prod)" class="btn red">Delete Item</button>
+          </div>
+        </form>
+<!--      </div> -->
+
+    </li>
+  </ul>
+</div>
+
+<ng-template #noItems>
+  <hr>
+  <h5>There are no items to list</h5>
+</ng-template>
+
+

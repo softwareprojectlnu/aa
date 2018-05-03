@@ -29,8 +29,6 @@ export class CartComponent implements OnInit {
       price : this.price
     };
 
-    console.log('Product - ', this.prod);
-    this.fb.addProduct(this.prod);
     this.appRoutes.navigate(['add']);
   }
 

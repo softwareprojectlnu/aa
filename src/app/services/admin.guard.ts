@@ -15,23 +15,15 @@ export class AdminGuard implements CanActivate {
   constructor(private auth: AuthService, private appRoutes: Router) {
   }
 
-  /*
-    canActivate(
-      next: ActivatedRouteSnapshot,
-      state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      this.user = this.userStore.select('user');
-      return this.user.map(user => user && user.role === 'ADMIN');
-    }
-  }
-  */
   canActivate(appRoutes, state: RouterStateSnapshot) {
     return this.auth.user.map((user) => {
-      if (user && user.isAdmin) {
+      if (user && user.isAdmin === 'true') {
         return true;
       }
       this.appRoutes.navigate(['login']);
     });
   }
+
 
 
 }

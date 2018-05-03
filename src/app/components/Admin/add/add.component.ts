@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
-import {FirebaseService} from '../../../services/firebase.service';
 import {PostService} from '../../../services/post.service';
 import {Product} from '../../../product';
-import {Users} from '../../../Users';
-import {FirebaseListObservable} from 'angularfire2/database-deprecated';
-import {AngularFireDatabase} from 'angularfire2/database';
+import {Observable} from 'rxjs/Observable';
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from 'angularfire2/firestore';
+
 
 @Component({
   selector: 'app-add',
@@ -13,34 +11,70 @@ import {AngularFireDatabase} from 'angularfire2/database';
   styleUrls: ['./add.component.css']
 })
 export class AddComponent implements OnInit {
-  product: Product = <Product>{};
-  user: FirebaseListObservable<Users[]>;
-  title;
-  type;
-  description;
-  price;
-  prod;
+  products: Product[];
+  editState: boolean = false;
+  itemToEdit: Product;
 
-  constructor(private fb: PostService, private appRoutes: Router, private db: AngularFireDatabase) { }
+  prodCollection: AngularFirestoreCollection<Product>;
+  pro: Observable<Product[]>;
+  prodDoc: AngularFirestoreDocument<Product>;
+/*
+  prod: Product = {
+    title: '',
+    type: '',
+    description: '',
+    price: 0
+  }
+  */
+title: string;
+type: string;
+description: string;
+price: number;
+photo: any;
+
+  constructor(private postService: PostService, private afs: AngularFirestore) {
+    afs.firestore.settings({timestampsInSnapshots: true});
+
+  }
 
   ngOnInit() {
+    this.postService.getProducts().subscribe(products => {
+      this.products = products;
+    });
   }
 
-
-  submitAdd() {
-    this.prod = {
-      title: this.title,
-      type: this.type,
-      description: this.description,
-      price : this.price
-  };
-
-    this.prod = this.product;
-    console.log('Product - ', this.prod);
-    this.fb.addProduct(this.prod);
-    this.user.push(this.prod);
-  //  this.appRoutes.navigate(['add']);
+add() {
+  this.afs.collection('products').add({
+    'title': this.title,
+    'type': this.type,
+    'price': this.price,
+    'description': this.description,
+    'photo': this.photo
+  });
+}
+/*
+  delete(event, prod: Product) {
+    this.clear();
+    this.postService.deleteProduct(prod);
   }
 
+  editable(event, prod: Product) {
+    this.editState = true;
+    this.itemToEdit = prod;
+  }
+
+  update(prod: Product) {
+    this.postService.updateProduct(prod);
+    this.clear();
+  }
+
+  clear() {
+    this.editState = false;
+    this.itemToEdit = null;
+  }
+*/
+  upload(event) {
+    this.postService.uploadPicture(event);
+  }
 
 }

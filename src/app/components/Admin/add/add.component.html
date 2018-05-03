@@ -1,90 +1,16 @@
-<!--
-<h1> Add a product </h1>
 
-<div class="add-prod-form">
-  <a [routerLink]="['/cart']">Back</a>
-  <form  #myForm="ngForm">
-    <mat-input-container class="full-width">
-      <input matInput placeholder="Product Title" [(ngModel)]="title" name="title" required >
-    </mat-input-container>
-
-    <mat-input-container class="full-width">
-      <input matInput placeholder="Product Type" [(ngModel)]="type" name="type" required>
-    </mat-input-container>
-    <mat-input-container class="full-width">
-      <input matInput placeholder="Product Price" type="number" [(ngModel)]="price" name="price" required>
-    </mat-input-container>
-
-
-    <div >
-      <mat-input-container class="full-width">
-        <textarea matInput rows="5" placeholder="Book Description" [(ngModel)]="description" name="description" ></textarea>
-      </mat-input-container>
-
-    </div>
-
-    <mat-input-container class="third-width">
-      <input mdInput placeholder="Image Url (enter image URL)" name="imageUrl" required>
-    </mat-input-container><br>
-    <button mat-raised-button value="submit" [disabled]="!myForm.form.valid" > Add product </button>
-  </form>
-</div>
--->
 <h3>Add a book</h3>
-<!--
-<form class="formwidth" (ngSubmit)="submitAdd()" #myForm="ngForm">
-  <table class="fullwidth" cellspacing="0">
+<ul>
+  <tr *ngFor="let person of products; let i = index">
 
-        <mat-input-container class="fullwidth">
-          <input matInput placeholder="Product Title" [(ngModel)]="title" name="title" required >
-        </mat-input-container>
-
-        <mat-input-container class="fullwidth">
-          <input matInput placeholder="Product Type" [(ngModel)]="type" name="type" required>
-        </mat-input-container>
-
-  </table>
-
-    <mat-input-container class="fullwidth">
-      <input matInput placeholder="Product Price" type="number" [(ngModel)]="price" name="price" required>
-    </mat-input-container>
-
-        <mat-input-container class="fullwidth">
-          <textarea matInput rows="5" placeholder="Book Description" [(ngModel)]="description" name="description" ></textarea>
-        </mat-input-container>
-
-  <button mat-raised-button (submit)="submitAdd()" >Submit</button>
-</form>
--->
-<div class="form">
-<mat-card>
-  <mat-form-field class ="mat-full-width">
-    <label for="title">Title</label>
-    <input matInput #title="ngModel" [(ngModel)]="product.title" [class.is-invalid]="title.touched && title.invalid" name="title" type="text"
-          id="title"  class="form-control" required>
-
-  </mat-form-field>
-
-  <mat-form-field class="mat-full-width">
-    <label for="type">Product Type</label>
-    <input matInput #type="ngModel" [(ngModel)]="product.type" [class.is-invalid]="type.touched && type.invalid" name="type" type="text"
-           id="type" class="form-control" required>
-
-  </mat-form-field>
-
-  <mat-form-field class="mat-full-width">
-    <label for="price">Price</label>
-    <input matInput #price="ngModel" [(ngModel)]="product.price" [class.is-invalid]="price.touched && price.invalid" name="price" type="number"
-           id="price"  class="form-control" required>
-
-  </mat-form-field>
-
-  <mat-form-field class="mat-full-width">
-    <label for="desc">Description</label>
-    <input matInput #desc="ngModel" [(ngModel)]="product.description" [class.is-invalid]="desc.touched && desc.invalid" name="desc" type="text"
-           id="desc"  class="form-control" required>
-  </mat-form-field>
-
-  <button class="mat-raised-button mat-primary" (click)="submitAdd()">Submit</button>
-</mat-card>
-</div>
+    <td>
+      Title - {{ person.title }} </td> <td>Type - {{ person.type }} </td>  <td>Price - {{ person.price }} </td> <td> Description - {{ person.description }} </td> <td>{{person.photo}} </td>
+  </tr>
+</ul>
+<input type="text" [(ngModel)]="title" name="title" placeholder="Enter the title">
+<input type="text" [(ngModel)]="type" name="type" placeholder="Enter the type">
+<input type="number" [(ngModel)]="price" name="price" placeholder="Enter the price">
+<input type="text" [(ngModel)]="description" name="description" placeholder="Enter the description">
+<label for="file">File:</label>
+<input type="file" [(ngModel)]="photo" name="photo" (change)="upload($event)" accept=".png,.jpg" />
+<input type="submit" value="Log in" (click)="add()">

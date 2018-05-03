@@ -46,12 +46,11 @@ import {RouterModule, Routes} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ViewComponent } from './components/Admin/view/view.component';
 import { DeleteComponent } from './components/Admin/delete/delete.component';
-import {StoreModule} from '@ngrx/store';
-import {EffectsModule} from '@ngrx/effects';
 import {UserService} from './services/user.service';
 import {AngularFirestoreModule} from 'angularfire2/firestore';
 import {AdminGuard} from './services/admin.guard';
 import {AuthGuard} from './services/auth.guard';
+import {AngularFireStorage} from 'angularfire2/storage';
 
 
 
@@ -64,8 +63,8 @@ const appRoutes: Routes = [
    { path: 'cart', component: CartComponent},
   { path: 'signup', component: SignupComponent},
   { path: 'signout', component: SignoutComponent},
-  { path: 'add', component: AddComponent, canActivate: [AdminGuard, AuthGuard]},
-//  { path: 'add', component: AddComponent},
+//  { path: 'add', component: AddComponent, canActivate: [AdminGuard, AuthGuard]},
+  { path: 'add', component: AddComponent},
   { path: 'delete', component: DeleteComponent},
   { path: 'view', component: ViewComponent}
 
@@ -99,12 +98,9 @@ const appRoutes: Routes = [
     AngularFireDatabaseModule,
     RouterModule.forRoot(appRoutes),
     AngularFirestoreModule
-
-   // StoreModule.forRoot(reducers),
-   // EffectsModule.forRoot(effects)
   ],
   exports: [RouterModule],
-  providers: [FirebaseService, PostService, AuthService, UserService, AdminGuard, AuthGuard],
+  providers: [FirebaseService, PostService, AuthService, UserService, AdminGuard, AuthGuard, AngularFireStorage],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
